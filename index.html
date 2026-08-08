@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>จดหมายถึงน้องโมม 💖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Taviraj:wght@400;500;600&family=Mali:wght@300;400;500;600&family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parchment:#FFF0F5;
+    --parchment-deep:#FDE2E4;
+    --pink-soft:#FFCAD4;
+    --pink-accent:#FF9AA2;
+    --pink-deep:#E07A5F;
+    --rose-text:#8B5E66;
+    --ink:#5C4033;
+    --paper:#FFFFFF;
+    --border-color:#F7CAD0;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:'Mali', sans-serif;
+    background:
+      radial-gradient(circle at 15% 15%, rgba(255,182,193,.35) 0%, transparent 45%),
+      radial-gradient(circle at 85% 85%, rgba(255,209,220,.45) 0%, transparent 50%),
+      var(--parchment);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* ---- Floating Hearts & Petals ---- */
+  .petals{position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden;}
+  .petals span{
+    position:absolute; top:-6%;
+    font-size: 14px;
+    opacity:.5;
+    animation:drift 14s linear infinite;
+  }
+  .petals span:nth-child(1){left:10%; animation-delay:0s;}
+  .petals span:nth-child(2){left:28%; animation-delay:3s; font-size:10px;}
+  .petals span:nth-child(3){left:52%; animation-delay:7s;}
+  .petals span:nth-child(4){left:71%; animation-delay:2s; font-size:18px;}
+  .petals span:nth-child(5){left:90%; animation-delay:5s; font-size:12px;}
+  @keyframes drift{
+    to{ transform:translateY(120vh) rotate(360deg); opacity:0; }
+  }
+
+  .stage{ position:relative; z-index:1; width:100%; max-width:460px; }
+
+  .card{
+    background:var(--paper);
+    border-radius:24px;
+    padding:34px 24px;
+    box-shadow:0 18px 40px -15px rgba(255, 154, 162, 0.35);
+    border:2px solid var(--border-color);
+  }
+
+  h1.brand{
+    font-family:'Taviraj', serif;
+    font-weight:600;
+    font-size:2rem;
+    text-align:center;
+    color:var(--pink-accent);
+    line-height:1.2;
+  }
+  p.tagline{
+    text-align:center;
+    font-size:.85rem;
+    color:var(--rose-text);
+    margin-top:8px;
+    margin-bottom:8px;
+    letter-spacing:.02em;
+  }
+
+  /* ---- closed envelope scene ---- */
+  .closed-scene{ text-align:center; padding-top:14px; }
+  .badge{
+    width:132px; height:132px; margin:20px auto 10px;
+    cursor:pointer;
+    animation:bob 3s ease-in-out infinite;
+    transition:transform .2s ease;
+  }
+  .badge:hover{ transform:scale(1.08) rotate(3deg); }
+  @keyframes bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-8px); } }
+
+  .open-btn{
+    margin-top:8px;
+    background:linear-gradient(135deg, #FF9AA2, #FFB7B2);
+    color:#fff; border:none; border-radius:20px;
+    padding:13px 28px; font-family:'Kanit', sans-serif; font-size:.95rem; font-weight:500;
+    cursor:pointer; letter-spacing:.02em;
+    box-shadow:0 8px 18px -6px rgba(255, 154, 162, 0.6);
+    transition:all .2s ease;
+  }
+  .open-btn:hover{ transform:translateY(-2px); box-shadow:0 10px 22px -4px rgba(255, 154, 162, 0.8); }
+  .hint{ font-size:.75rem; color:var(--rose-text); margin-top:12px; }
+
+  /* ---- Modal / Pop-up ---- */
+  .modal-overlay{
+    position:fixed; inset:0;
+    background:rgba(92, 64, 51, 0.35);
+    backdrop-filter:blur(3px);
+    display:flex; align-items:center; justify-content:center;
+    padding:20px; z-index:100;
+    opacity:0; pointer-events:none;
+    transition:opacity .3s ease;
+  }
+  .modal-overlay.active{
+    opacity:1; pointer-events:auto;
+  }
+  .modal-card{
+    background:#FFFFFF; border-radius:24px;
+    padding:32px 24px 20px; width:100%; max-width:380px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.12);
+    border:2px solid var(--border-color);
+    text-align:center;
+    transform:scale(0.85); transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .modal-overlay.active .modal-card{ transform:scale(1); }
+  .modal-text{
+    font-size:1.05rem; line-height:1.65; color:var(--ink);
+    margin-bottom:20px; font-weight:500; text-align:center;
+  }
+
+  .dodge-row{
+    position:relative; height:150px; width:100%; margin:0 auto;
+    overflow:visible;
+  }
+  .btn-yes, .btn-no{
+    position:absolute; top:50%; left:50%;
+    font-family:'Kanit', sans-serif; border:none; border-radius:18px;
+    cursor:pointer;
+  }
+  .btn-yes{
+    transform:translate(calc(-100% - 12px), -50%);
+    background:linear-gradient(135deg, #FF9AA2, #FFB7B2);
+    color:#fff; padding:12px 28px; font-size:1rem; font-weight:500;
+    box-shadow:0 8px 18px -6px rgba(255, 154, 162, 0.6);
+    transition:transform .28s cubic-bezier(.34,1.56,.64,1);
+    z-index:2;
+    transform-origin: center center;
+  }
+  .btn-no{
+    transform:translate(12px, -50%);
+    background:#FFF; color:var(--rose-text);
+    border:1.5px solid var(--pink-soft);
+    padding:12px 28px; font-size:1rem; font-weight:500;
+    transition:left .22s ease, top .22s ease, transform .22s ease;
+    z-index:10;
+  }
+
+  /* ---- letter reveal ---- */
+  .letter-wrap{ opacity:0; transform:translateY(10px); }
+  .letter-wrap.show{
+    animation:reveal .7s ease forwards;
+  }
+  @keyframes reveal{ to{ opacity:1; transform:translateY(0); } }
+
+  .letter-paper{
+    background:#FFFDFB;
+    background-image:repeating-linear-gradient(#FFFDFB 0 28px, #FDE2E4 29px);
+    border:1.5px solid var(--pink-soft);
+    border-radius:16px;
+    padding:28px 20px 22px;
+    margin-top:12px;
+    text-align:center; /* จัดตัวหนังสือและรูปให้อยู่ตรงกลาง */
+    box-shadow:0 12px 28px -12px rgba(255, 182, 193, 0.5);
+  }
+  .letter-paper .msg{
+    font-family:'Mali', sans-serif;
+    font-size:1rem; 
+    line-height:28px; 
+    white-space:pre-wrap;
+    word-break:break-word;
+    overflow-wrap:break-word;
+    color:var(--ink);
+    text-align:center;
+  }
+  .flower-mark{ text-align:center; margin-top:16px; }
+  .flower-mark img{ 
+    max-width: 90px;
+    height: auto;
+    display: inline-block;
+  }
+
+  .back-link{
+    display:inline-flex; align-items:center; gap:6px;
+    background:none; border:none; cursor:pointer;
+    font-family:'Kanit', sans-serif; font-size:.85rem;
+    color:var(--rose-text); margin-top:20px;
+    padding:0;
+    transition:color .2s;
+  }
+  .back-link:hover{ color:var(--pink-accent); }
+</style>
+</head>
+<body>
+
+<div class="petals" aria-hidden="true">
+  <span>🌸</span><span>💗</span><span>🌸</span><span>✨</span><span>💕</span>
+</div>
+
+<div class="stage">
+  <div class="card">
+    <h1 class="brand">A Handmade Gift from Me :P</h1>
+    <p class="tagline">✉︎</p>
+    <div id="view"></div>
+  </div>
+</div>
+
+<!-- 🌸 Pop-up Modal 🌸 -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-card">
+    <div class="modal-text">
+      วันนี้ขอโทษที่ทำตัวไม่น่ารัก แต่พี่รักโมนะ<br>ไม่อยากให้รู้สึกแย่ จะหายโกรธพี่ได้มั้ย
+    </div>
+    <div class="dodge-row" id="modalDodgeRow">
+      <button class="btn-yes" id="modalBtnYes">ใช่</button>
+      <button class="btn-no" id="modalBtnNo">ไม่</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const view = document.getElementById('view');
+const modalOverlay = document.getElementById('modalOverlay');
+
+const LETTER = `เลยวาดรูปมาง้อ`;
+
+// 🎨 ชื่อไฟล์รูปดอกไม้วาดเอง
+const flowerImgUrl = "ดาวน์โหลด.png";
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+// 💌 Envelope Graphic
+const badgeSvg = `<svg viewBox="0 0 100 100" fill="none">
+<defs>
+  <linearGradient id="pinkGrad" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#FFCAD4"/>
+    <stop offset="1" stop-color="#FF9AA2"/>
+  </linearGradient>
+</defs>
+<rect x="4" y="4" width="92" height="92" rx="28" fill="#FFF0F5" stroke="url(#pinkGrad)" stroke-width="4"/>
+<rect x="18" y="32" width="64" height="42" rx="8" fill="#FFFFFF" stroke="#FF9AA2" stroke-width="2.5"/>
+<path d="M19.5 33.5 L50 54.5 L80.5 33.5" stroke="#FF9AA2" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M50 45c2.5-3.5 7.5-3.5 7.5 1.2 0 4.5-7.5 8.5-7.5 8.5s-7.5-4-7.5-8.5c0-4.7 5-4.7 7.5-1.2z" fill="#FF5964"/>
+</svg>`;
+
+function renderClosed(){
+  view.innerHTML = `
+    <div class="closed-scene">
+      <div class="badge" id="badge">${badgeSvg}</div>
+      <button class="open-btn" id="openBtn">เปิดอ่านจดหมาย 🌸</button>
+      <div class="hint">แตะซองจดหมายหรือกดปุ่มเพื่อเปิดอ่าน</div>
+    </div>
+  `;
+  const badge = document.getElementById('badge');
+  const openBtn = document.getElementById('openBtn');
+  
+  badge.addEventListener('click', showPopup);
+  openBtn.addEventListener('click', showPopup);
+}
+
+function showPopup(){
+  modalOverlay.classList.add('active');
+  setupModalDodge();
+}
+
+function hidePopup(){
+  modalOverlay.classList.remove('active');
+}
+
+function setupModalDodge(){
+  const row = document.getElementById('modalDodgeRow');
+  const btnYes = document.getElementById('modalBtnYes');
+  const btnNo = document.getElementById('modalBtnNo');
+  
+  let dodges = 0;
+  btnYes.style.transform = `translate(calc(-100% - 12px), -50%) scale(1)`;
+  btnNo.style.left = '';
+  btnNo.style.top = '';
+  btnNo.style.transform = 'translate(12px, -50%)';
+
+  const dodge = (e) => {
+    if(e) e.preventDefault();
+    dodges++;
+    
+    const rect = row.getBoundingClientRect();
+    const bw = btnNo.offsetWidth, bh = btnNo.offsetHeight;
+
+    const scale = 1 + dodges * 0.22;
+    btnYes.style.transform = `translate(calc(-100% - 12px), -50%) scale(${scale})`;
+
+    let x, y, safe = false;
+    let attempts = 0;
+    while (!safe && attempts < 50) {
+      attempts++;
+      x = Math.random() * Math.max(rect.width - bw, 10);
+      y = Math.random() * Math.max(rect.height - bh, 10);
+      
+      const isOverlappingYes = (x < rect.width * 0.45 && y > rect.height * 0.2 && y < rect.height * 0.8);
+      if (!isOverlappingYes) {
+        safe = true;
+      }
+    }
+
+    btnNo.style.left = x + 'px';
+    btnNo.style.top = y + 'px';
+    btnNo.style.transform = 'none';
+  };
+
+  btnNo.onclick = dodge;
+  btnNo.ontouchstart = dodge;
+
+  btnYes.onclick = () => {
+    hidePopup();
+    renderLetter();
+  };
+}
+
+function renderLetter(){
+  view.innerHTML = `
+    <div class="letter-wrap" id="letterWrap">
+      <div class="letter-paper">
+        <div class="msg">${escapeHtml(LETTER)}</div>
+        <div class="flower-mark">
+          <img src="${flowerImgUrl}" alt="Hand drawn flower">
+        </div>
+      </div>
+      <button class="back-link" id="back">← ปิดจดหมาย</button>
+    </div>
+  `;
+  requestAnimationFrame(() => {
+    document.getElementById('letterWrap').classList.add('show');
+  });
+  document.getElementById('back').onclick = renderClosed;
+}
+
+renderClosed();
+</script>
+</body>
+</html>
