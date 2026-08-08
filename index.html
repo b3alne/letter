@@ -36,7 +36,6 @@
     position:relative;
   }
 
-  /* ---- Floating Hearts & Petals ---- */
   .petals{position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden;}
   .petals span{
     position:absolute; top:-6%;
@@ -80,7 +79,6 @@
     letter-spacing:.02em;
   }
 
-  /* ---- closed envelope scene ---- */
   .closed-scene{ text-align:center; padding-top:14px; }
   .badge{
     width:132px; height:132px; margin:20px auto 10px;
@@ -103,7 +101,6 @@
   .open-btn:hover{ transform:translateY(-2px); box-shadow:0 10px 22px -4px rgba(255, 154, 162, 0.8); }
   .hint{ font-size:.75rem; color:var(--rose-text); margin-top:12px; }
 
-  /* ---- Modal / Pop-up ---- */
   .modal-overlay{
     position:fixed; inset:0;
     background:rgba(92, 64, 51, 0.35);
@@ -157,7 +154,6 @@
     z-index:10;
   }
 
-  /* ---- letter reveal ---- */
   .letter-wrap{ opacity:0; transform:translateY(10px); }
   .letter-wrap.show{
     animation:reveal .7s ease forwards;
@@ -171,7 +167,7 @@
     border-radius:16px;
     padding:28px 20px 22px;
     margin-top:12px;
-    text-align:center; /* จัดตัวหนังสือและรูปให้อยู่ตรงกลาง */
+    text-align:center;
     box-shadow:0 12px 28px -12px rgba(255, 182, 193, 0.5);
   }
   .letter-paper .msg{
@@ -186,7 +182,8 @@
   }
   .flower-mark{ text-align:center; margin-top:16px; }
   .flower-mark img{ 
-    max-width: 90px;
+    max-width: 200px; /* 👈 ขยายขนาดความกว้างตรงนี้เรียบร้อยครับ */
+    width: 100%;
     height: auto;
     display: inline-block;
   }
@@ -216,7 +213,6 @@
   </div>
 </div>
 
-<!-- 🌸 Pop-up Modal 🌸 -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-card">
     <div class="modal-text">
@@ -235,8 +231,8 @@ const modalOverlay = document.getElementById('modalOverlay');
 
 const LETTER = `เลยวาดรูปมาง้อ`;
 
-// 🎨 ชื่อไฟล์รูปดอกไม้วาดเอง
-const flowerImgUrl = "ดาวน์โหลด.png";
+// 🎨 ใส่ชื่อไฟล์รูปของคุณตรงนี้
+const flowerImgUrl = "my-flower.png";
 
 function escapeHtml(str){
   const d = document.createElement('div');
@@ -244,7 +240,6 @@ function escapeHtml(str){
   return d.innerHTML;
 }
 
-// 💌 Envelope Graphic
 const badgeSvg = `<svg viewBox="0 0 100 100" fill="none">
 <defs>
   <linearGradient id="pinkGrad" x1="0" y1="0" x2="1" y2="1">
